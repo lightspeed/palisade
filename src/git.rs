@@ -9,7 +9,7 @@ pub(crate) fn push_tags(repo: &Repository) -> Result<()> {
 }
 
 pub(crate) fn tag_version(repo: &Repository, tag: String, desc: String) -> Result<()> {
-    let sig = &Signature::now("Gitea Release Tool", "gitea-release@tulpa.dev")?;
+    let sig = &Signature::now("Palisade", "christine.dodrill+palisade@lightspeedhq.com")?;
     let obj = repo.revparse_single("HEAD")?;
     repo.tag(&tag, &obj, &sig, &desc, false)?;
 
@@ -53,7 +53,7 @@ mod tests {
         let oid = index.write_tree()?;
         let tree = repo.find_tree(oid)?;
 
-        let sig = &Signature::now("Gitea Release Tool", "gitea-release@tulpa.dev")?;
+        let sig = &Signature::now("Palisade", "p@lisa.de")?;
         repo.commit(
             Some("HEAD"),
             &sig,

@@ -1,12 +1,11 @@
 let
   sources = import ./nix/sources.nix;
-  pkgs = import sources.nixpkgs { };
+  mozilla = import sources.nixpkgs-mozilla;
+  pkgs = import sources.nixpkgs { overlays = [ mozilla ]; };
 in pkgs.mkShell {
   buildInputs = with pkgs; [
     # rust
-    rls
-    rustc
-    cargo
+    latest.rustChannels.stable.rust
     cargo-watch
 
     # dependencies
@@ -14,5 +13,8 @@ in pkgs.mkShell {
     libiconv
     openssl
     pkg-config
+
+    # darwin
+    darwin.apple_sdk.frameworks.Security
   ];
 }
