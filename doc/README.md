@@ -2,9 +2,11 @@
 
 A simple release automation tool for GitHub repos
 
-Palisade (IPA: /pæl əˈseɪd/) is a tool that reads from CHANGELOG and VERSION files
-then uses them to cut releases of software. This tool is intended to be run by
-CI tools on every commit to master.
+Palisade ([IPA][ipa]: /pæl əˈseɪd/) is a tool that reads from changelog and
+version files  then uses them to cut releases of software. This tool is intended
+to be run by CI tools on every commit to master.
+
+[ipa]: https://en.wikipedia.org/wiki/International_Phonetic_Alphabet
 
 ## Raison d'Être
 
