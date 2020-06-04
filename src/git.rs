@@ -1,6 +1,7 @@
 use anyhow::Result;
 use git2::{Repository, Signature};
 
+/// Push all tags in the repo to the upstream origin.
 pub(crate) fn push_tags(repo: &Repository) -> Result<()> {
     let mut remote = repo.find_remote("origin")?;
     remote.connect(git2::Direction::Push)?;
@@ -8,7 +9,8 @@ pub(crate) fn push_tags(repo: &Repository) -> Result<()> {
     Ok(())
 }
 
-pub(crate) fn tag_version(repo: &Repository, tag: String, desc: String) -> Result<()> {
+/// Tag the HEAD commit with a given version and description.
+pub(crate) fn tag_version(repo: &Repository, tag: &String, desc: &String) -> Result<()> {
     let sig = &Signature::now("Palisade", "christine.dodrill+palisade@lightspeedhq.com")?;
     let obj = repo.revparse_single("HEAD")?;
     repo.tag(&tag, &obj, &sig, &desc, false)?;
@@ -16,7 +18,8 @@ pub(crate) fn tag_version(repo: &Repository, tag: String, desc: String) -> Resul
     Ok(())
 }
 
-pub(crate) fn has_tag(repo: &Repository, tag: String) -> Result<bool> {
+/// Returns Ok(true) if the given repository has the given tag.
+pub(crate) fn has_tag(repo: &Repository, tag: &String) -> Result<bool> {
     let tags = repo.tag_names(Some(&tag))?;
 
     for tag_obj in tags.iter() {
@@ -25,7 +28,7 @@ pub(crate) fn has_tag(repo: &Repository, tag: String) -> Result<bool> {
         }
 
         let tag_name = tag_obj.unwrap();
-        if tag == tag_name.to_string() {
+        if *tag == tag_name.to_string() {
             return Ok(true);
         }
     }
@@ -63,8 +66,8 @@ mod tests {
             &[],
         )?;
 
-        super::tag_version(&repo, TAG.into(), format!("version {}", TAG))?;
-        assert!(super::has_tag(&repo, TAG.into())?);
+        super::tag_version(&repo, &TAG.to_string(), &format!("version {}", TAG))?;
+        assert!(super::has_tag(&repo, &TAG.to_string())?);
 
         Ok(())
     }

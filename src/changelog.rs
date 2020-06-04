@@ -4,7 +4,36 @@ use comrak::{format_commonmark, parse_document, Arena, ComrakOptions};
 use std::fs::read_to_string;
 use std::path::PathBuf;
 
-pub(crate) fn read(fname: PathBuf, tag: String) -> Result<String> {
+/** Read changelog entries based on a given tag. Given a changelog that looks like this:
+
+```markdown
+# Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 0.1.0
+
+### FIXED
+
+- Refrobnicate the spurious rilkefs
+
+## 0.0.1
+
+First release, proof of concept.
+```
+
+When the tag 0.1.0 is passed, this function will return a result that looks
+like this:
+
+```markdown
+### FIXED
+
+- Refrobnicate the spurious rilkefs
+```
+*/
+pub(crate) fn read(fname: PathBuf, tag: &String) -> Result<String> {
     let data = read_to_string(fname)?;
     let arena = Arena::new();
     let mut root = parse_document(&arena, &data, &ComrakOptions::default());
@@ -24,7 +53,7 @@ pub(crate) fn read(fname: PathBuf, tag: String) -> Result<String> {
 
                     let found_tag = String::from_utf8(nd.content.clone())?;
 
-                    if found_tag == tag {
+                    if found_tag == *tag {
                         collect = true;
                     }
                 } else {
@@ -71,9 +100,12 @@ where
 mod tests {
     #[test]
     fn read_changelog() {
-        let res = super::read("testdata/basic.md".into(), "0.1.0".into());
+        let res = super::read("testdata/basic.md".into(), &"0.1.0".into());
         assert!(res.is_ok());
         let delta = res.unwrap();
-        assert_eq!(delta, "Hi there this is a test\\!\n### ADDED\n  - something\n")
+        assert_eq!(
+            delta,
+            "Hi there this is a test\\!\n### ADDED\n  - something\n"
+        )
     }
 }

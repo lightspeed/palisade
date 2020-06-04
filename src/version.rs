@@ -1,6 +1,7 @@
 use anyhow::Result;
 use std::{fs, path::PathBuf};
 
+/// Parses the VERSION file into a string without trailing newlines.
 pub(crate) fn read_version(fname: PathBuf) -> Result<String> {
     let version = fs::read_to_string(fname)?;
     Ok(version.trim().into())
