@@ -1,12 +1,20 @@
-use anyhow::Result;
-use git2::{Repository, Signature};
+use anyhow::{anyhow, Result};
+use git2::{Cred, RemoteCallbacks, Repository, Signature};
 
 /// Push all tags in the repo to the upstream origin.
-pub(crate) fn push_tags(repo: &Repository) -> Result<()> {
+pub(crate) fn push_tag(repo: &Repository, token: &String, tag: &String) -> Result<()> {
+    let mut callbacks = RemoteCallbacks::new();
+    callbacks.credentials(|_u, _username_from_url, _allowed_types| {
+        Cred::userpass_plaintext(&token, "")
+    });
     let mut remote = repo.find_remote("origin")?;
-    remote.connect(git2::Direction::Push)?;
-    remote.push(&["refs/tags/*:refs/tags/*"], None)?;
-    Ok(())
+    let mut po = git2::PushOptions::new();
+    po.remote_callbacks(callbacks);
+
+    match remote.push(&[&format!("refs/tags/{}:refs/tags/{}", tag, tag)], Some(&mut po)) {
+        Ok(_) => Ok(()),
+        Err(why) => Err(anyhow!("git push error: {:?}", why)),
+    }
 }
 
 /// Tag the HEAD commit with a given version and description.

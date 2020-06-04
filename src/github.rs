@@ -73,7 +73,6 @@ pub struct Author {
     pub repos_url: String,
     pub events_url: String,
     pub received_events_url: String,
-    pub type_field: String,
     pub site_admin: bool,
 }
 
@@ -107,7 +106,7 @@ impl Client {
         repo: String,
         cr: CreateRelease,
     ) -> Result<Release> {
-        let result: Release = self
+        let resp = self
             .cli
             .post(&format!(
                 "https://api.github.com/repos/{}/{}/releases",
@@ -116,8 +115,9 @@ impl Client {
             .json(&cr)
             .send()
             .await?
-            .json()
-            .await?;
+            .error_for_status()?;
+
+        let result: Release = resp.json().await?;
 
         Ok(result)
     }
