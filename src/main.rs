@@ -1,11 +1,11 @@
 use std::path::PathBuf;
 use structopt::StructOpt;
 
-pub(crate) mod cmd;
-pub(crate) mod changelog;
-pub(crate) mod git;
-pub(crate) mod github;
-pub(crate) mod version;
+mod cmd;
+mod changelog;
+mod git;
+mod github;
+mod version;
 
 #[derive(StructOpt, Debug)]
 pub(crate) struct Common {
