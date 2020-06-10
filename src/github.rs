@@ -76,7 +76,8 @@ pub struct Author {
     pub site_admin: bool,
 }
 
-/// Client interacts with the GitHub API as described in https://developer.github.com/v3/ asynchronously.
+/// Client interacts with the GitHub API as described in https://developer.github.com/v3/
+/// asynchronously.
 pub struct Client {
     cli: reqwest::Client,
 }
@@ -100,6 +101,8 @@ impl Client {
         Ok(Client { cli: cli })
     }
 
+    /// Creates a new GitHub release following the schema here:
+    /// https://developer.github.com/v3/repos/releases/#create-a-release
     pub(crate) async fn create_release(
         &self,
         owner: String,
@@ -112,12 +115,12 @@ impl Client {
                 "https://api.github.com/repos/{}/{}/releases",
                 owner, repo
             ))
-            .json(&cr)
+            .json(&cr) // auto-magically json-encodes the CreateRelease argument from the caller into the request body
             .send()
             .await?
-            .error_for_status()?;
+            .error_for_status()?; // returns an error if the response code isn't 2xx
 
-        let result: Release = resp.json().await?;
+        let result: Release = resp.json().await?; // decodes the response as json into a Release using serde
 
         Ok(result)
     }

@@ -19,5 +19,5 @@ let
   remapPathPrefix = true;
 in naersk.buildPackage {
   inherit src remapPathPrefix;
-  buildInputs = with pkgs; [ pkg-config openssl libgit2 ];
+  buildInputs = with pkgs; [ pkg-config openssl libgit2 zlib ];
 }

@@ -25,7 +25,7 @@ First release, proof of concept.
 ```
 
 When the tag 0.1.0 is passed, this function will return a result that looks
-like this:
+something like this:
 
 ```markdown
 ### FIXED
@@ -34,9 +34,10 @@ like this:
 ```
 */
 pub(crate) fn read(fname: PathBuf, tag: &String) -> Result<String> {
+    // This is based on the example from the comrak documentation: https://docs.rs/comrak/0.7.0/comrak/
     let data = read_to_string(fname)?;
     let arena = Arena::new();
-    let mut root = parse_document(&arena, &data, &ComrakOptions::default());
+    let mut root = parse_document(&arena, &data, &ComrakOptions::default()); // XXX(Christine): you may need to change these options if more fancy markdown features are needed
 
     let mut collect = false;
     let mut buf = Vec::<u8>::new();
@@ -51,6 +52,12 @@ pub(crate) fn read(fname: PathBuf, tag: &String) -> Result<String> {
                         collect = false;
                     }
 
+                    // Grab the content of a header, IE the `foobar` of:
+                    // ```markdown
+                    // ## foobar
+                    // ````
+                    //
+                    // This is compared to the tag passed in the header
                     let found_tag = String::from_utf8(nd.content.clone())?;
 
                     if found_tag == *tag {
@@ -84,6 +91,7 @@ where
     f(node)?;
     for c in node.children() {
         match c.data.borrow().value {
+            // ignore text, item and code AST nodes to avoid duplication in the output string
             NodeValue::Text(_) => {}
             NodeValue::Item(_) => {}
             NodeValue::Code(_) => {}

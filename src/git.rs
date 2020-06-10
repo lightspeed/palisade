@@ -51,6 +51,7 @@ mod tests {
     use std::{fs::File, io::Write, path::Path};
     use tempfile::tempdir;
 
+    /// Creates a git repo and tests the has_tag and tag_version functions.
     #[test]
     fn has_tag() -> Result<()> {
         const TAG: &'static str = "0.1.0";
