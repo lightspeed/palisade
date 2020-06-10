@@ -386,7 +386,7 @@ mod tests { // not required but it is good practice
   
   #[test]
   async fn http_works() {
-    let _ = get_html("https://within.website").unwrap();
+    let _ = get_html("https://within.website").await.unwrap();
   }
 }
 ```

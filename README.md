@@ -53,6 +53,15 @@ Details on how to do this will be distribution specific. Please consult the
 documentation of your package manager and operating system to figure out the
 list of packages you will need.
 
+Tests can be run with `cargo test`:
+
+```console
+$ cargo test
+```
+
+Please be sure any tests relevant to the changes pass and that all changes are
+tested (when possible).
+
 ## Raison d'Être
 
 Existing automated release scripts for our GitHub repos have been flaky and have
