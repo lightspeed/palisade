@@ -1,5 +1,9 @@
 # palisade
 
+[![built with
+nix](https://builtwithnix.org/badge.svg)](https://builtwithnix.org)
+[![written in rust](https://img.shields.io/badge/language-Rust-orange)](https://www.rust-lang.org/)
+
 A simple release automation tool for GitHub repos
 
 Palisade ([IPA][ipa]: /pæl əˈseɪd/) is a tool that reads from changelog and
@@ -7,6 +11,47 @@ version files  then uses them to cut releases of software. This tool is intended
 to be run by CI tools on every commit to master.
 
 [ipa]: https://en.wikipedia.org/wiki/International_Phonetic_Alphabet
+
+## Build Instructions
+
+### With Nix
+
+If you have [Nix](https://nixos.org/nix) installed, you can run the following
+command to build this software:
+
+```console
+$ nix-build
+```
+
+This will automatically create a release build linked to `./result`. The binary
+will be `./result/bin/palisade`. 
+
+### With Cargo
+
+```console
+$ cargo build --release
+```
+
+## Hacking
+
+If you are using Nix, [direnv](https://direnv.net/) and
+[Lorri](https://github.com/target/lorri), you can get an exact replica of the
+required development environment by running `direnv allow` in the checkout of
+this project. See [this
+blogpost](https://christine.website/blog/how-i-start-nix-2020-03-08) for more
+information on how to install Nix if you want to try this workflow out.
+
+If you are not using Nix, you need at least the following dependencies:
+
+- Rust 1.43 or newer
+- libgit2 (newest if possible)
+- libiconv (should be part of glibc on linux)
+- openssl and its development headers
+- pkg-config
+
+Details on how to do this will be distribution specific. Please consult the
+documentation of your package manager and operating system to figure out the
+list of packages you will need.
 
 ## Raison d'Être
 
@@ -60,7 +105,7 @@ code of your project, exposing something normally hidden in git to your team.
 
 [semver]: https://semver.org/spec/v2.0.0.html
 
-## Release Process
+### How It Works
 
 When this tool is run with the `cut` subcommand, the following actions take place:
 
