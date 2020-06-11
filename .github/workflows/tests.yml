@@ -17,3 +17,9 @@ jobs:
           args: --all-features
       - uses: cachix/install-nix-action@v9
       - run: nix-build docker.nix
+      - uses: actions-rs/cargo@v1
+        with:
+          command: build
+      - run: ./target/debug/palisade git-hub-action
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
