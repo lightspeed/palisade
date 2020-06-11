@@ -20,6 +20,6 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: build
-      - run: ./target/debug/palisade git-hub-action
+      - run: ./target/debug/palisade github-action
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
