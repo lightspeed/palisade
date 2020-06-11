@@ -15,8 +15,8 @@ jobs:
         with:
           command: test
           args: --all-features
-      - uses: cachix/install-nix-action@v9
-      - run: nix-build docker.nix
+      # - uses: cachix/install-nix-action@v9
+      # - run: nix-build docker.nix
       - uses: actions-rs/cargo@v1
         with:
           command: build
