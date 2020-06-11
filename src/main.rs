@@ -34,10 +34,10 @@ pub(crate) struct GitHubAction {
 
     // these are set by the end user of this action
     /// Changelog filename relative to repo root
-    #[structopt(env = "CHANGELOG_FILENAME", default_value = "./CHANGELOG.md")]
+    #[structopt(long, env = "CHANGELOG_FILENAME", default_value = "./CHANGELOG.md")]
     pub changelog_fname: PathBuf,
     /// GitHub token to authenticate with
-    #[structopt(env = "GITHUB_TOKEN")]
+    #[structopt(long, env = "GITHUB_TOKEN")]
     pub token: String,
 }
 
@@ -71,10 +71,10 @@ pub(crate) struct CircleCIEnv {
 
     // These are set by the user
     /// Changelog filename relative to repo root
-    #[structopt(env = "CHANGELOG_FILENAME", default_value = "./CHANGELOG.md")]
+    #[structopt(long, env = "CHANGELOG_FILENAME", default_value = "./CHANGELOG.md")]
     pub changelog_fname: PathBuf,
     /// GitHub token to authenticate with
-    #[structopt(env = "GITHUB_TOKEN")]
+    #[structopt(long, env = "GITHUB_TOKEN", hide_env_values = true)]
     pub token: String,
 }
 
