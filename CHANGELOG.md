@@ -21,3 +21,4 @@ This is the first release of palisade!
 - TL;DR Rust document
 - GitHub Action support
 - Commentary across the project
+- Support using SSH keys for authentication to GitHub
