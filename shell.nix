@@ -9,6 +9,10 @@ let
 in pkgs.mkShell {
   buildInputs = with pkgs;
     [
+      # Nix dev tools
+      nixfmt
+      (import <nixpkgs> {}).niv # exact version of niv doesn't matter
+
       # rust
       latest.rustChannels.stable.rust
       cargo-watch
