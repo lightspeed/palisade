@@ -57,9 +57,45 @@ instead of `0.1.0`.
 ### Set up Palisade to run in CI
 
 Both of the configurations below will configure palisade to automatically run
-after tests pass on your default branch.
+after tests pass on your default branch. You will need a GitHub personal access
+token with the `repo` permission associated to a user that has the "Maintain"
+permission for the repository you want to do releases for.
 
 #### GitHub Actions
+
+Palisade can be run on GitHub Actions without any special setup. Be sure to have
+this step run only on your default branch. You will need to put a personal
+access token with the `repo` permission in a secret named `GH_TOKEN`.
+
+Something like this configuration should suffice:
+
+```yaml
+jobs:
+  test:
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run tests
+        run: cargo test
+  release:
+    needs: test
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Releases via Palisade
+        uses: docker://lightspeedretail/palisade
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          args: github-action
+```
+
+If your default branch is not named `master`, you will need to adjust the `if`
+value in the Palisade step to the name of your default branch. Here are a few
+examples:
+
+- `if: github.ref == 'refs/heads/main'`
+- `if: github.ref == 'refs/heads/trunk'`
+- `if: github.ref == 'refs/heads/develop'`
+- `if: github.ref == 'refs/heads/edge'`
 
 #### CircleCI
 
@@ -161,3 +197,8 @@ This would create a release for tag `v0.2.0` with the following notes:
 - Solved WAT-2392 which previously prevented users from being able to
   refrobnicate already frobnicated strings when using the secret management API.
 ```
+
+You can then have any triggers that run on a new tag being created (such as
+packages being built or version bump pull requests being made). This is used
+in Lightspeed in order to automate version management for a few of our internal
+tooling projects.
