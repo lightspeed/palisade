@@ -27,7 +27,7 @@ pub(crate) fn push_tag(repo: &Repository, token: &String, tag: &String) -> Resul
 
 /// Tag the HEAD commit with a given version and description.
 pub(crate) fn tag_version(repo: &Repository, tag: &String, desc: &String) -> Result<()> {
-    let sig = &Signature::now("Palisade", "christine.dodrill+palisade@lightspeedhq.com")?;
+    let sig = &Signature::now("Palisade", "christine.dodrill+palisade@lightspeedhq.com")?; // TODO(Christine): make this configurable
     let obj = repo.revparse_single("HEAD")?;
     repo.tag(&tag, &obj, &sig, &desc, false)?;
 
