@@ -33,14 +33,19 @@ something like this:
 - Refrobnicate the spurious rilkefs
 ```
 */
-pub(crate) fn read(fname: PathBuf, tag: &String) -> Result<String> {
+pub(crate) fn read<T, U>(fname: T, tag: U) -> Result<String>
+where
+    T: Into<PathBuf>,
+    U: Into<String>,
+{
     // This is based on the example from the comrak documentation: https://docs.rs/comrak/0.7.0/comrak/
-    let data = read_to_string(fname)?;
+    let data = read_to_string(fname.into())?;
     let arena = Arena::new();
     let mut root = parse_document(&arena, &data, &ComrakOptions::default()); // XXX(Christine): you may need to change these options if more fancy markdown features are needed
 
     let mut collect = false;
     let mut buf = Vec::<u8>::new();
+    let tag = &tag.into();
 
     iter_nodes(&mut root, &mut |node| {
         let nd = node.data.borrow();
@@ -53,11 +58,12 @@ pub(crate) fn read(fname: PathBuf, tag: &String) -> Result<String> {
                     }
 
                     // Grab the content of a header, IE the `foobar` of:
+                    //
                     // ```markdown
                     // ## foobar
                     // ````
                     //
-                    // This is compared to the tag passed in the header
+                    // This is compared to the tag passed as a function argument
                     let found_tag = String::from_utf8(nd.content.clone())?;
 
                     if found_tag == *tag {
@@ -108,7 +114,7 @@ where
 mod tests {
     #[test]
     fn read_changelog() {
-        let res = super::read("testdata/basic.md".into(), &"0.1.0".into());
+        let res = super::read("testdata/basic.md", "0.1.0");
         assert!(res.is_ok());
         let delta = res.unwrap();
         assert_eq!(

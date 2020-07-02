@@ -5,7 +5,7 @@ use std::path::PathBuf;
 /// Cuts a new release with GitHub details and a changelog filename.
 pub(crate) async fn run(common: Common, fname: PathBuf) -> Result<()> {
     let repo = git2::Repository::open(".")?;
-    let tag = version::read_version("VERSION".into())?;
+    let tag = version::read_version("VERSION")?;
     let vtag = format!("v{}", tag);
     let desc = changelog::read(fname, &tag)?;
 

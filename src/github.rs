@@ -109,7 +109,7 @@ impl Client {
         repo: String,
         cr: CreateRelease,
     ) -> Result<Release> {
-        let resp = self
+        let result: Release = self
             .cli
             .post(&format!(
                 "https://api.github.com/repos/{}/{}/releases",
@@ -118,9 +118,9 @@ impl Client {
             .json(&cr) // auto-magically json-encodes the CreateRelease argument from the caller into the request body
             .send()
             .await?
-            .error_for_status()?; // returns an error if the response code isn't 2xx
-
-        let result: Release = resp.json().await?; // decodes the response as json into a Release using serde
+            .error_for_status()? // returns an error if the response code isn't 2xx
+            .json() // decodes the response as json into a Release using serde
+            .await?;
 
         Ok(result)
     }
