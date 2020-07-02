@@ -26,22 +26,16 @@ pub(crate) fn push_tag(repo: &Repository, token: &String, tag: &String) -> Resul
 }
 
 /// Tag the HEAD commit with a given version and description.
-pub(crate) fn tag_version<T, U, V, W>(
+pub(crate) fn tag_version(
     repo: &Repository,
-    username: T,
-    email: U,
-    tag: V,
-    desc: W,
-) -> Result<()>
-where
-    T: Into<String>,
-    U: Into<String>,
-    V: Into<String>,
-    W: Into<String>,
-{
-    let sig = &Signature::now(&username.into(), &email.into())?;
+    username: &String,
+    email: &String,
+    tag: &String,
+    desc: &String,
+) -> Result<()> {
+    let sig = &Signature::now(&username, &email)?;
     let obj = repo.revparse_single("HEAD")?;
-    repo.tag(&tag.into(), &obj, &sig, &desc.into(), false)?;
+    repo.tag(&tag, &obj, &sig, &desc, false)?;
 
     Ok(())
 }
@@ -98,7 +92,13 @@ mod tests {
             &[],
         )?;
 
-        super::tag_version(&repo, USERNAME, EMAIL, TAG, format!("version {}", TAG))?;
+        super::tag_version(
+            &repo,
+            &USERNAME.to_string(),
+            &EMAIL.to_string(),
+            &TAG.to_string(),
+            &format!("version {}", TAG),
+        )?;
         assert!(super::has_tag(&repo, &TAG.to_string())?);
 
         Ok(())
