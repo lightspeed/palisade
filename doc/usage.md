@@ -99,6 +99,9 @@ examples:
 - `if: github.ref == 'refs/heads/develop'`
 - `if: github.ref == 'refs/heads/edge'`
 
+Please replace the `SIGNATURE_NAME` and `SIGNATURE_EMAIL` values as relevant for
+your project or organization.
+
 #### CircleCI
 
 Running this on CircleCI requires using a physical machine to run the release
