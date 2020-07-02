@@ -25,3 +25,5 @@ jobs:
       - run: ./target/debug/palisade github-action
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          SIGNATURE_NAME: Domo
+          SIGNATURE_EMAIL: automation@lightspeedhq.com
