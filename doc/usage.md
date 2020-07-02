@@ -84,6 +84,8 @@ jobs:
         uses: docker://lightspeedretail/palisade
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          SIGNATURE_NAME: Divae
+          SIGNATURE_EMAIL: automation@yourdomain.com
         with:
           args: github-action
 ```
@@ -119,6 +121,8 @@ jobs:
               -e CIRCLE_PROJECT_USERNAME \
               -e CIRCLE_PROJECT_REPONAME \
               -e CIRCLE_BRANCH \
+              -e SIGNATURE_NAME=Divae \
+              -e SIGNATURE_EMAIL=automation@yourdomain.com \
               --volume $SSH_AUTH_SOCK:/ssh-agent \
               --env SSH_AUTH_SOCK=/ssh-agent \
               lightspeedretail/palisade \
@@ -140,6 +144,9 @@ workflows:
 
 If your project uses a non-master branch as the default branch, replace `master`
 above with the name if the project's default branch.
+
+Please replace the `SIGNATURE_NAME` and `SIGNATURE_EMAIL` values as relevant for
+your project or organization.
 
 ## Release management
 

@@ -13,12 +13,22 @@ pub(crate) struct Common {
     /// GitHub token to authenticate with
     #[structopt(long, short, env = "GITHUB_TOKEN")]
     pub token: String,
+
     /// Repo owner
     #[structopt(long, short = "O", env = "REPO_OWNER")]
     pub owner: String,
+
     /// Repo name
     #[structopt(long, short = "R", env = "REPO_NAME")]
     pub name: String,
+
+    /// Git signature email
+    #[structopt(long, short = "E", env = "SIGNATURE_EMAIL", default_value = "not@configured.value")]
+    pub email: String,
+
+    /// Git signature username
+    #[structopt(long, short = "U", env = "SIGNATURE_NAME", default_value = "Not Configured")]
+    pub username: String,
 }
 
 #[derive(StructOpt, Debug)]
@@ -28,6 +38,7 @@ pub(crate) struct GitHubAction {
     /// GitHub repository in owner/repo format
     #[structopt(env = "GITHUB_REPOSITORY")]
     pub repo: String,
+
     /// GitHub ref
     #[structopt(env = "GITHUB_REF")]
     pub refname: String,
@@ -36,9 +47,18 @@ pub(crate) struct GitHubAction {
     /// Changelog filename relative to repo root
     #[structopt(long, env = "CHANGELOG_FILENAME", default_value = "./CHANGELOG.md")]
     pub changelog_fname: PathBuf,
+
     /// GitHub token to authenticate with
     #[structopt(long, env = "GITHUB_TOKEN")]
     pub token: String,
+
+    /// Git signature email
+    #[structopt(long, env = "SIGNATURE_EMAIL", default_value = "not@configured.value")]
+    pub email: String,
+
+    /// Git signature username
+    #[structopt(long, env = "SIGNATURE_NAME", default_value = "Not Configured")]
+    pub username: String,
 }
 
 // Conversion function for turning a GitHubAction into a Common
@@ -51,6 +71,8 @@ impl From<GitHubAction> for Common {
             token: gha.token,
             owner: owner_repo[0].to_string(),
             name: owner_repo[1].to_string(),
+            email: gha.email,
+            username: gha.username,
         }
     }
 }
@@ -62,9 +84,11 @@ pub(crate) struct CircleCIEnv {
     /// Github project owner
     #[structopt(env = "CIRCLE_PROJECT_USERNAME")]
     pub owner: String,
+
     /// Github repo name
     #[structopt(env = "CIRCLE_PROJECT_REPONAME")]
     pub repo: String,
+
     /// Git branch
     #[structopt(env = "CIRCLE_BRANCH")]
     pub branch: String,
@@ -73,9 +97,18 @@ pub(crate) struct CircleCIEnv {
     /// Changelog filename relative to repo root
     #[structopt(long, env = "CHANGELOG_FILENAME", default_value = "./CHANGELOG.md")]
     pub changelog_fname: PathBuf,
+
     /// GitHub token to authenticate with
     #[structopt(long, env = "GITHUB_TOKEN", hide_env_values = true)]
     pub token: String,
+
+    /// Git signature email
+    #[structopt(long, env = "SIGNATURE_EMAIL", default_value = "not@configured.value")]
+    pub email: String,
+
+    /// Git signature username
+    #[structopt(long, env = "SIGNATURE_NAME", default_value = "Not Configured")]
+    pub username: String,
 }
 
 // Conversion function for turning a CircleCIEnv into a Common.
@@ -86,6 +119,8 @@ impl From<CircleCIEnv> for Common {
             token: ccie.token,
             owner: ccie.owner,
             name: ccie.repo,
+            email: ccie.email,
+            username: ccie.username,
         }
     }
 }

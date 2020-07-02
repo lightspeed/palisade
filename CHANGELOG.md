@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### FIXED
+
+- Email addresses and usernames for git signatures are now configurable
+
 ## 0.2.0
 
 ### ADDED

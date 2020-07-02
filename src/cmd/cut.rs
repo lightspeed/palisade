@@ -10,7 +10,7 @@ pub(crate) async fn run(common: Common, fname: PathBuf) -> Result<()> {
     let desc = changelog::read(fname, &tag)?;
 
     if !git::has_tag(&repo, &vtag)? {
-        git::tag_version(&repo, &vtag, &desc)?;
+        git::tag_version(&repo, &common.username, &common.email, &vtag, &desc)?;
         println!("tagged version {}", vtag);
         git::push_tag(&repo, &common.token, &vtag)?;
         println!("pushed tag {} to github", vtag);

@@ -26,10 +26,22 @@ pub(crate) fn push_tag(repo: &Repository, token: &String, tag: &String) -> Resul
 }
 
 /// Tag the HEAD commit with a given version and description.
-pub(crate) fn tag_version(repo: &Repository, tag: &String, desc: &String) -> Result<()> {
-    let sig = &Signature::now("Palisade", "christine.dodrill+palisade@lightspeedhq.com")?; // TODO(Christine): make this configurable
+pub(crate) fn tag_version<T, U, V, W>(
+    repo: &Repository,
+    username: T,
+    email: U,
+    tag: V,
+    desc: W,
+) -> Result<()>
+where
+    T: Into<String>,
+    U: Into<String>,
+    V: Into<String>,
+    W: Into<String>,
+{
+    let sig = &Signature::now(&username.into(), &email.into())?;
     let obj = repo.revparse_single("HEAD")?;
-    repo.tag(&tag, &obj, &sig, &desc, false)?;
+    repo.tag(&tag.into(), &obj, &sig, &desc.into(), false)?;
 
     Ok(())
 }
@@ -63,6 +75,8 @@ mod tests {
     #[test]
     fn has_tag() -> Result<()> {
         const TAG: &'static str = "0.1.0";
+        const USERNAME: &'static str = "Palisade";
+
         let dir = tempdir()?;
         let repo = Repository::init(&dir)?;
         let mut fout = File::create(&dir.path().join("VERSION"))?;
