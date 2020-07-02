@@ -76,6 +76,7 @@ mod tests {
     fn has_tag() -> Result<()> {
         const TAG: &'static str = "0.1.0";
         const USERNAME: &'static str = "Palisade";
+        const EMAIL: &'static str = "p@lisa.de";
 
         let dir = tempdir()?;
         let repo = Repository::init(&dir)?;
@@ -87,7 +88,7 @@ mod tests {
         let oid = index.write_tree()?;
         let tree = repo.find_tree(oid)?;
 
-        let sig = &Signature::now("Palisade", "p@lisa.de")?;
+        let sig = &Signature::now(USERNAME, EMAIL)?;
         repo.commit(
             Some("HEAD"),
             &sig,
@@ -97,7 +98,7 @@ mod tests {
             &[],
         )?;
 
-        super::tag_version(&repo, &TAG.to_string(), &format!("version {}", TAG))?;
+        super::tag_version(&repo, USERNAME, EMAIL, TAG, format!("version {}", TAG))?;
         assert!(super::has_tag(&repo, &TAG.to_string())?);
 
         Ok(())
