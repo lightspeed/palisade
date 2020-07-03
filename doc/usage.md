@@ -88,18 +88,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
+      - uses: actions/checkout@v2
       - name: Releases via Palisade
         run: |
-          docker run \
-            --rm \
-            --name palisade \
-            -v $(pwd):/workspace \
-            --workdir /workspace
-            -e GITHUB_TOKEN \
-            -e GITHUB_REF \
-            -e GITHUB_REPOSITORY \
-            lightspeedretail/palisade \
-            palisade github-action
+          docker run --rm --name palisade -v $(pwd):/workspace -e GITHUB_TOKEN -e GITHUB_REF -e GITHUB_REPOSITORY --workdir /workspace lightspeedretail/palisade palisade github-action
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 ```
