@@ -50,8 +50,9 @@ mod tests {
             &[],
         )?;
 
+        let obj = repo.revparse_single("HEAD")?;
         let desc = format!("version {}", TAG);
-        repo.tag(&tag, &obj, &sig, &desc, false)?;
+        repo.tag(&TAG.to_string(), &obj, &sig, &desc, false)?;
         assert!(super::has_tag(&repo, &TAG.to_string())?);
 
         Ok(())
