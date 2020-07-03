@@ -1,38 +1,5 @@
-use anyhow::{anyhow, Result};
-use git2::{Cred, RemoteCallbacks, Repository, Signature};
-
-/// Push all tags in the repo to the upstream origin.
-pub(crate) fn push_tag(repo: &Repository, token: &String, tag: &String) -> Result<()> {
-    let mut callbacks = RemoteCallbacks::new();
-    callbacks.credentials(|_u, _username_from_url, allowed_types| {
-        if allowed_types.contains(git2::CredentialType::SSH_KEY) {
-            let user = "git";
-            git2::Cred::ssh_key_from_agent(user)
-        } else {
-            Cred::userpass_plaintext(&token, "")
-        }
-    });
-    let mut remote = repo.find_remote("origin")?;
-    let mut po = git2::PushOptions::new();
-    po.remote_callbacks(callbacks);
-
-    match remote.push(
-        &[&format!("refs/tags/{}:refs/tags/{}", tag, tag)],
-        Some(&mut po),
-    ) {
-        Ok(_) => Ok(()),
-        Err(why) => Err(anyhow!("git push error: {:?}", why)),
-    }
-}
-
-/// Tag the HEAD commit with a given version and description.
-pub(crate) fn tag_version(repo: &Repository, tag: &String, desc: &String) -> Result<()> {
-    let sig = &Signature::now("Palisade", "christine.dodrill+palisade@lightspeedhq.com")?; // TODO(Christine): make this configurable
-    let obj = repo.revparse_single("HEAD")?;
-    repo.tag(&tag, &obj, &sig, &desc, false)?;
-
-    Ok(())
-}
+use anyhow::Result;
+use git2::Repository;
 
 /// Returns Ok(true) if the given repository has the given tag.
 pub(crate) fn has_tag(repo: &Repository, tag: &String) -> Result<bool> {
@@ -83,7 +50,8 @@ mod tests {
             &[],
         )?;
 
-        super::tag_version(&repo, &TAG.to_string(), &format!("version {}", TAG))?;
+        let desc = format!("version {}", TAG);
+        repo.tag(&tag, &obj, &sig, &desc, false)?;
         assert!(super::has_tag(&repo, &TAG.to_string())?);
 
         Ok(())

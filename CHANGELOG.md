@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### FIXED
+
+- Don't push the git tag to github, this apparently causes weird permissions
+  issues. GitHub will create a tag as a side effect of creating a release
+  anyways.
+
 ## 0.2.0
 
 ### ADDED
