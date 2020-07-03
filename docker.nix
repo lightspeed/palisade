@@ -1,9 +1,9 @@
 { system ? builtins.currentSystem }:
 
 let
-  pkgs = import <nixpkgs> { };
-  callPackage = pkgs.lib.callPackageWith pkgs;
-  palisade = callPackage ./default.nix { };
+  sources = import ./nix/sources.nix { };
+  pkgs = import sources.nixpkgs { };
+  palisade = import ./default.nix { };
 
   dockerImage = pkg:
     pkgs.dockerTools.buildLayeredImage {
