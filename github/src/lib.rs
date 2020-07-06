@@ -138,8 +138,6 @@ impl Client {
 
     /// Creates a new GitHub repo following the schema here:
     /// https://developer.github.com/v3/repos/#create-a-repository-for-the-authenticated-user
-    ///
-    /// This is mainly used in tests.
     pub async fn create_repo(&self, rc: RepoCreate) -> Result<Repo> {
         let result: Repo = self
             .cli
@@ -156,8 +154,6 @@ impl Client {
 
     /// Deletes a GitHub repo following the schema here:
     /// https://developer.github.com/v3/repos/#delete-a-repository
-    ///
-    /// This is mainly used in tests.
     pub async fn delete_repo(&self, owner: String, repo: String) -> Result<()> {
         self.cli
             .delete(&format!("{}repos/{}/{}", self.base_url, owner, repo))
