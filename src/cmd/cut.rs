@@ -1,9 +1,10 @@
-use crate::*;
+use crate::{git, changelog, version, cmd::*};
+use github::*;
 use anyhow::Result;
 use std::path::PathBuf;
 
 /// Cuts a new release with GitHub details and a changelog filename.
-pub(crate) async fn run(common: Common, fname: PathBuf) -> Result<()> {
+pub async fn run(common: Common, fname: PathBuf) -> Result<()> {
     let repo = git2::Repository::open(".")?;
     let tag = version::read_version("VERSION")?;
     let vtag = format!("v{}", tag);
@@ -21,9 +22,9 @@ pub(crate) async fn run(common: Common, fname: PathBuf) -> Result<()> {
         return Ok(());
     }
 
-    let gh = github::Client::new(common.token)?;
+    let gh = Client::new(common.token)?;
 
-    let release = gh.create_release(common.owner, common.name, github::CreateRelease{
+    let release = gh.create_release(common.owner, common.name, CreateRelease{
         tag_name: tag.clone(),
         target_commitish: "master".into(), // XXX(Christine): this may need to become an argument somehow.
         name: format!("Version {}", tag),
