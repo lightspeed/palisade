@@ -16,7 +16,9 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --all-features
+          args: --all
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       - uses: cachix/install-nix-action@v9
       - run: nix-build docker.nix
       - uses: actions-rs/cargo@v1
