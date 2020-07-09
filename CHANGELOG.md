@@ -6,6 +6,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Support for brackets in version numbers has been added. This allows you to write
+changelogs that look like this:
+
+```markdown
+## [0.1.0]
+
+This release completes our Flopnax sprint. We now have a publicly visible
+GraphQL API as a part of this project.
+
+### ADDED
+
+- Exposed GraphQL API for customers and internal integrators
+
+### FIXED
+
+- Solved WAT-2392 which previously prevented users from being able to
+  refrobnicate already frobnicated strings when using the secret management API.
+```
+
+### ADDED
+
+- The GitHub client is now exposed as a crate in `./github`. This is potentially
+  useful for non-palisade use.
+- Full end to end tests of the entire release cutting process.
+
 ## 0.2.0
 
 ### ADDED
