@@ -11,6 +11,7 @@ pub(crate) fn has_tag(repo: &Repository, tag: &String) -> Result<bool> {
         }
 
         let tag_name = tag_obj.unwrap();
+        log::debug!("found tag: {}", tag_name.to_string());
         if *tag == tag_name.to_string() {
             return Ok(true);
         }

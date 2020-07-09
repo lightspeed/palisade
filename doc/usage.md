@@ -6,6 +6,7 @@ At a high level you need to do the following:
 
 - Set up the CHANGELOG file
 - Set up the VERSION file
+- Set up a GitHub Personal Access Token
 - Set up Palisade to run in CI
 
 Afterwards, you can follow the release process listed below in the "Release
@@ -54,6 +55,13 @@ version file in `./VERSION`:
 If the current version of your software is already set, use this version number
 instead of `0.1.0`.
 
+### Set up a GitHub Personal Access Token
+
+Follow the [GitHub Personal Access
+Token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
+instructions and check the `repo` permission. GitHub unfortunately doesn't offer
+fine-grained permissions
+
 ### Set up Palisade to run in CI
 
 Both of the configurations below will configure palisade to automatically run
@@ -67,40 +75,32 @@ Palisade can be run on GitHub Actions without any special setup. Be sure to have
 this step run only on your default branch. You will need to put a personal
 access token with the `repo` permission in a secret named `GH_TOKEN`.
 
-Something like this configuration should suffice:
+Putting something like this configuration in `.github/workflows/palisade.yml`
+should suffice:
 
 ```yaml
+on: [push]
+
+name: Releases
+
 jobs:
-  test:
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run tests
-        run: cargo test
   release:
-    needs: test
+    runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
+      - uses: actions/checkout@v2
       - name: Releases via Palisade
-        uses: docker://lightspeedretail/palisade
+        run: |
+          docker run --rm --name palisade -v $(pwd):/workspace -e GITHUB_TOKEN -e GITHUB_REF -e GITHUB_REPOSITORY --workdir /workspace lightspeedretail/palisade palisade github-action
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        with:
-          args: github-action
 ```
-
-If your default branch is not named `master`, you will need to adjust the `if`
-value in the Palisade step to the name of your default branch. Here are a few
-examples:
-
-- `if: github.ref == 'refs/heads/main'`
-- `if: github.ref == 'refs/heads/trunk'`
-- `if: github.ref == 'refs/heads/develop'`
-- `if: github.ref == 'refs/heads/edge'`
 
 #### CircleCI
 
 Running this on CircleCI requires using a physical machine to run the release
-job. The release job will look something like this:
+job. The release job will look something like this in your
+`.circleci/config.yml`:
 
 ```yaml
 jobs:
@@ -128,18 +128,12 @@ workflows:
   version: 2
   tests:
     jobs:
-      - build
       - release:
-          requires:
-            - build
           filters:
             branches:
               only:
                 - master
 ```
-
-If your project uses a non-master branch as the default branch, replace `master`
-above with the name if the project's default branch.
 
 ## Release management
 
