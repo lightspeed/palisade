@@ -123,7 +123,5 @@ When this tool is run with the `cut` subcommand, the following actions take plac
   and the changes for the `VERSION` are cherry-picked out of the file
 - The git repo is checked to see if that tag already exists
   - If the tag exists, the tool exits and does nothing
-- If the tag does not exist, it is created (with the changelog fragment as the
-  body of the tag) and pushed to GitHub using locally stored credentials
 - A GitHub release is created using the changelog fragment and the release name
-  is generated from the `VERSION` string
+  is generated from the `VERSION` string, which creates a matching git tag

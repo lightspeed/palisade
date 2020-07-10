@@ -31,6 +31,12 @@ GraphQL API as a part of this project.
   useful for non-palisade use.
 - Full end to end tests of the entire release cutting process.
 
+### FIXED
+
+- Don't push the git tag to github, this apparently causes weird permissions
+  issues. GitHub will create a tag as a side effect of creating a release
+  anyways.
+
 ## 0.2.0
 
 ### ADDED

@@ -175,9 +175,7 @@ could add this to your `CHANGELOG.md`:
 
 When palisade runs, it will load the contents of the VERSION file and compare it
 to the list of git tags in the repo. If that version tag is not found, then it
-will create a new tag. The body of the tag will be the changelog entry for the
-new version. This will then be pushed to GitHub and a new GitHub release will be
-created with the same metadata.
+will create a new GitHub release with the changelog entry for the new version.
 
 This would create a release for tag `v0.2.0` with the following notes:
 

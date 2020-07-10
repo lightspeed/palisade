@@ -10,14 +10,8 @@ pub async fn run(common: Common, fname: PathBuf) -> Result<()> {
     let vtag = format!("v{}", tag);
     let desc = changelog::read(fname, &tag)?;
 
-    if !git::has_tag(&repo, &vtag)? {
-        git::tag_version(&repo, &vtag, &desc)?;
-        println!("tagged version {}", vtag);
-        git::push_tag(&repo, &common.token, &vtag)?;
-        println!("pushed tag {} to github", vtag);
-    } else
-    /* the tag exists in the repo */
-    {
+    if git::has_tag(&repo, &vtag)? {
+        /* the tag exists in the repo */
         println!("{} already exists as a git tag, exiting", vtag);
         return Ok(());
     }
