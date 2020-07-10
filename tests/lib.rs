@@ -4,8 +4,6 @@ use git2::*;
 use std::{env, fs::File, io::Write, path::Path};
 use tempfile::tempdir;
 
-mod elfs;
-
 const GH_TOKEN_NAME: &'static str = "GITHUB_TOKEN";
 
 #[test]
