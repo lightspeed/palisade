@@ -66,7 +66,7 @@ where
                     // This is compared to the tag passed as a function argument
                     let found_tag = String::from_utf8(nd.content.clone())?;
 
-                    if found_tag == *tag {
+                    if found_tag == *tag || found_tag == format!("[{}]", tag) {
                         collect = true;
                     }
                 } else {
@@ -113,8 +113,19 @@ where
 #[cfg(test)]
 mod tests {
     #[test]
-    fn read_changelog() {
+    fn basic() {
         let res = super::read("testdata/basic.md", "0.1.0");
+        assert!(res.is_ok());
+        let delta = res.unwrap();
+        assert_eq!(
+            delta,
+            "Hi there this is a test\\!\n### ADDED\n  - something\n"
+        )
+    }
+
+    #[test]
+    fn brackets() {
+        let res = super::read("testdata/brackets.md", "0.1.0");
         assert!(res.is_ok());
         let delta = res.unwrap();
         assert_eq!(
