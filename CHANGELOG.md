@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 0.3.0
+
 Support for brackets in version numbers has been added. This allows you to write
 changelogs that look like this:
 
