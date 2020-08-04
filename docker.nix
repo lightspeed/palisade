@@ -14,6 +14,7 @@ let
 
       config = {
         Cmd = [ "/bin/palisade" "cut" ];
+        Env = [ "RUST_LOG=info" ];
         WorkingDir = "/";
       };
     };

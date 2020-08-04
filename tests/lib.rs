@@ -19,6 +19,7 @@ fn to_clone_url(u: String) -> Result<String> {
 
 #[tokio::test]
 async fn cut() -> Result<()> {
+    let _ = pretty_env_logger::try_init();
     const TAG: &'static str = "0.1.0";
     let token = env::var(GH_TOKEN_NAME)?;
 

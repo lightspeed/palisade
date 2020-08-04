@@ -3,6 +3,7 @@ use structopt::StructOpt;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    pretty_env_logger::init();
     let cmd = Cmd::from_args();
 
     match cmd {

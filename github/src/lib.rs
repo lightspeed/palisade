@@ -1,5 +1,5 @@
-use anyhow::Result;
-use reqwest::header;
+use anyhow::{anyhow, Result};
+use reqwest::{header, StatusCode};
 use serde::{Deserialize, Serialize};
 
 /// The inputs to https://developer.github.com/v3/repos/releases/#create-a-release
@@ -174,7 +174,7 @@ impl Client {
         repo: String,
         cr: CreateRelease,
     ) -> Result<Release> {
-        let result: Release = self
+        let resp = self
             .cli
             .post(&format!(
                 "{}repos/{}/{}/releases",
@@ -182,12 +182,24 @@ impl Client {
             ))
             .json(&cr) // auto-magically json-encodes the CreateRelease argument from the caller into the request body
             .send()
-            .await?
-            .error_for_status()? // returns an error if the response code isn't 2xx
-            .json() // decodes the response as json into a Release using serde
             .await?;
 
-        Ok(result)
+        if resp.status().is_success() {
+            let body = resp.text().await?;
+            let result: Release = serde_json::from_str(&body)?;
+            Ok(result)
+        } else {
+            let status = resp.status();
+            let body = resp.text().await?;
+            log::error!(
+                "got a weird error when trying to submit a new release for {}/{}: {}",
+                owner,
+                repo,
+                status,
+            );
+            log::debug!("body: {}", body);
+            Err(anyhow!("bad response from github: {:?}: {}", status, body))
+        }
     }
 
     /// Gets the most recent release for a GitHub repo following the schema here:
