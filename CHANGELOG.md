@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 0.4.0
+
+Tag names were incorrectly generated. Before they were the version number, but now they are `v${VERSION}`. This should fix compatibility issues with Go modules.
+
+An end-to-end test has been fixed as well.
+
 ## 0.3.0
 
 Support for brackets in version numbers has been added. This allows you to write
