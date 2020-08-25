@@ -91,7 +91,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Releases via Palisade
         run: |
-          docker run --rm --name palisade -v $(pwd):/workspace -e GITHUB_TOKEN -e GITHUB_REF -e GITHUB_REPOSITORY --workdir /workspace lightspeedretail/palisade palisade github-action
+          docker run --rm --name palisade -v $(pwd):/workspace -e GITHUB_TOKEN -e GITHUB_REF -e GITHUB_REPOSITORY --workdir /workspace lightspeedhq/palisade palisade github-action
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 ```
@@ -121,7 +121,7 @@ jobs:
               -e CIRCLE_BRANCH \
               --volume $SSH_AUTH_SOCK:/ssh-agent \
               --env SSH_AUTH_SOCK=/ssh-agent \
-              lightspeedretail/palisade \
+              lightspeedhq/palisade \
               palisade circle
           
 workflows:
