@@ -7,7 +7,7 @@ let
 
   dockerImage = pkg:
     pkgs.dockerTools.buildLayeredImage {
-      name = "lightspeedretail/palisade";
+      name = "lightspeedhq/palisade";
       tag = "latest";
 
       contents = [ pkgs.cacert pkg ];

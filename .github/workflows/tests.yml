@@ -20,8 +20,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           RUST_LOG: info
-      - uses: cachix/install-nix-action@v9
-      - run: nix-build docker.nix
       - uses: actions-rs/cargo@v1
         with:
           command: build
