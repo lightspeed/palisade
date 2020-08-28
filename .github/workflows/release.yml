@@ -1,0 +1,21 @@
+on:
+  release:
+    types:
+      - created
+
+name: Release
+
+jobs:
+  do:
+    name: Do release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: cachix/install-nix-action@v9
+      - run: nix-build docker.nix
+      - run: docker load -i result
+      - run: |
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+          docker push lightspeedhq/palisade
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

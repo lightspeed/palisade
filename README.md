@@ -125,3 +125,6 @@ When this tool is run with the `cut` subcommand, the following actions take plac
   - If the tag exists, the tool exits and does nothing
 - A GitHub release is created using the changelog fragment and the release name
   is generated from the `VERSION` string, which creates a matching git tag
+
+See [here](./doc/usage.md) for instructions on how to integrate this tool into
+your CI workflows.
