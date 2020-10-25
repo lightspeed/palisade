@@ -6,6 +6,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 0.5.0
+
+Closes #15
+
+### Meta
+- Fixes `nix-shell` on NixOS
+- Fixes `rustc` on NixOS (failed with an obscure libz error a-la [this
+  issue](https://github.com/NixOS/nixpkgs/issues/91314))
+- Updates nixpkgs-mozilla to the newest version
+
+### Palisade
+- Enable support for non-master default branches in GitHub actions
+
+### `github`
+- Add `default_branch` to the list of Repo properties
+- Add a `Client::get_repo` call that fetches repo information from the GitHub API
+
 ## 0.4.0
 
 Tag names were incorrectly generated. Before they were the version number, but now they are `v${VERSION}`. This should fix compatibility issues with Go modules.

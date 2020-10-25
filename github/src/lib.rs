@@ -1,5 +1,5 @@
 use anyhow::{anyhow, Result};
-use reqwest::{header, StatusCode};
+use reqwest::header;
 use serde::{Deserialize, Serialize};
 
 /// The inputs to https://developer.github.com/v3/repos/releases/#create-a-release
@@ -101,6 +101,7 @@ pub struct Repo {
     pub has_projects: bool,
     pub has_wiki: bool,
     pub html_url: String,
+    pub default_branch: String,
 }
 
 /// Client interacts with the GitHub API as described in https://developer.github.com/v3/
@@ -134,6 +135,21 @@ impl Client {
             cli: cli,
             base_url: base_url,
         })
+    }
+
+    /// Gets information about a GitHub repo following the schema here:
+    /// https://developer.github.com/v3/repos/#get-a-repository
+    pub async fn get_repo(&self, owner: String, repo: String) -> Result<Repo> {
+        let result: Repo = self
+            .cli
+            .get(&format!("{}repos/{}/{}", self.base_url, owner, repo))
+            .send()
+            .await?
+            .error_for_status()?
+            .json()
+            .await?;
+
+        Ok(result)
     }
 
     /// Creates a new GitHub repo following the schema here:
